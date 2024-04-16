@@ -15,7 +15,7 @@ class MediaDownload {
   static const MethodChannel _channel = MethodChannel('custom_notifications');
 
   Future<void> downloadMedia(BuildContext context, String url,
-      [String? location, String? fileName]) async {
+      [String? location, String? fileName, String? authToken]) async {
     await requestPermission();
     final String pdfUrl = url;
     final HttpClient httpClient = HttpClient();
@@ -25,7 +25,7 @@ class MediaDownload {
       final HttpClientRequest request = await httpClient.getUrl(
         uri,
       );
-
+      request.headers.add(HttpHeaders.authorizationHeader, authToken ?? '');
       final HttpClientResponse response = await request.close();
 
       if (response.statusCode == HttpStatus.ok) {
