@@ -15,7 +15,7 @@ class MediaDownload {
   static const MethodChannel _channel = MethodChannel('custom_notifications');
 
   Future<void> downloadMedia(BuildContext context, String url,
-      [String? location, String? fileName, String? authToken]) async {
+      [String? location, String? fileName, String? authToken, String? extension]) async {
     await requestPermission();
     final String pdfUrl = url;
     final HttpClient httpClient = HttpClient();
@@ -48,12 +48,17 @@ class MediaDownload {
                 uriPath.substring(lastSlashIndex + 1);
 
             int dotIndex = fileNameWithExtension.lastIndexOf('.');
-            final fileExtension = uriPath
+            String fileExtension = uriPath
                 .toString()
                 .substring(uriPath.toString().toLowerCase().length - 3);
             String nameWithoutExtension =
                 fileName ?? fileNameWithExtension.substring(0, dotIndex);
-
+            if(extension != null) {
+              fileExtension = extension;
+            }
+            if(fileName != null) {
+              nameWithoutExtension = fileName;
+            }
             final File file = File(
                 '${baseStorage?.path}/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
@@ -73,11 +78,17 @@ class MediaDownload {
             String fileNameWithExtension =
                 uriPath.substring(lastSlashIndex + 1);
             int dotIndex = fileNameWithExtension.lastIndexOf('.');
-            final fileExtension = uriPath
+            String fileExtension = uriPath
                 .toString()
                 .substring(uriPath.toString().toLowerCase().length - 3);
             String nameWithoutExtension =
                 fileName ?? fileNameWithExtension.substring(0, dotIndex);
+            if(extension != null) {
+              fileExtension = extension;
+            }
+            if(fileName != null) {
+              nameWithoutExtension = fileName;
+            }
             final File file =
                 File('$location/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
@@ -105,11 +116,17 @@ class MediaDownload {
             String fileNameWithExtension =
                 uriPath.substring(lastSlashIndex + 1);
             int dotIndex = fileNameWithExtension.lastIndexOf('.');
-            final fileExtension = uriPath
+            String fileExtension = uriPath
                 .toString()
                 .substring(uriPath.toString().toLowerCase().length - 3);
             String nameWithoutExtension =
                 fileName ?? fileNameWithExtension.substring(0, dotIndex);
+            if(extension != null) {
+              fileExtension = extension;
+            }
+            if(fileName != null) {
+              nameWithoutExtension = fileName;
+            }
             final File file =
                 File('${documents.path}/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
@@ -124,11 +141,17 @@ class MediaDownload {
             String fileNameWithExtension =
                 uriPath.substring(lastSlashIndex + 1);
             int dotIndex = fileNameWithExtension.lastIndexOf('.');
-            final fileExtension = uriPath
+            String fileExtension = uriPath
                 .toString()
                 .substring(uriPath.toString().toLowerCase().length - 3);
             String nameWithoutExtension =
                 fileName ?? fileNameWithExtension.substring(0, dotIndex);
+            if(extension != null) {
+              fileExtension = extension;
+            }
+            if(fileName != null) {
+              nameWithoutExtension = fileName;
+            }
             final File file =
                 File('$location/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
