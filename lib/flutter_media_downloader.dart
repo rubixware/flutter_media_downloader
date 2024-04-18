@@ -130,8 +130,8 @@ class MediaDownload {
             final File file =
                 File('${documents.path}/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
-            await showCustomNotification('File Download', nameWithoutExtension);
-            await openMediaFile(file.path);
+            //await showCustomNotification('File Download', nameWithoutExtension);
+            //await openMediaFile(file.path);
             if (kDebugMode) {
               print('PDF Downloaded successfully. Path: ${file.path}');
             }
@@ -155,8 +155,8 @@ class MediaDownload {
             final File file =
                 File('$location/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
-            await showCustomNotification('File Download', nameWithoutExtension);
-            await openMediaFile(file.path);
+            //await showCustomNotification('File Download', nameWithoutExtension);
+            //await openMediaFile(file.path);
             if (kDebugMode) {
               print('PDF Downloaded successfully. Path: ${file.path}');
             }
