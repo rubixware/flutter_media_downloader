@@ -67,7 +67,7 @@ public class FlutterMediaDownloaderPlugin: NSObject, FlutterPlugin , UIDocumentP
        documentPicker.modalPresentationStyle = .formSheet
 
        if let viewController = UIApplication.shared.keyWindow?.rootViewController {
-           viewController.presentOptionsMenu(documentPicker, animated: true, completion: nil)
+           viewController.present(documentPicker, animated: true, completion: nil)
        }
    }
 }
