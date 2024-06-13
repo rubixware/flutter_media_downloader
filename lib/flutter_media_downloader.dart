@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_media_downloader/file_name_format.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -43,61 +44,38 @@ class MediaDownload {
 
         if (Platform.isAndroid) {
           if (location == null || location == '') {
-            int lastSlashIndex = uriPath.lastIndexOf('/');
-            String fileNameWithExtension =
-                uriPath.substring(lastSlashIndex + 1);
-
-            int dotIndex = fileNameWithExtension.lastIndexOf('.');
-            String fileExtension = uriPath
-                .toString()
-                .substring(uriPath.toString().toLowerCase().length - 3);
+            String fileExtension = FileNameFormat().fileNameExtension(url);
             String nameWithoutExtension =
-                fileName ?? fileNameWithExtension.substring(0, dotIndex);
-            if(extension != null) {
-              fileExtension = extension;
-            }
-            if(fileName != null) {
-              nameWithoutExtension = fileName;
-            }
+                FileNameFormat().fileNameWithOutExtension(url);
+
+            debugPrint('Android fileExtension ${'$fileExtension'}');
+            debugPrint(
+                'Android nameWithoutExtension ${'$nameWithoutExtension'}');
+            debugPrint(
+                'Android  ${baseStorage?.path}/$nameWithoutExtension.$fileExtension');
             final File file = File(
                 '${baseStorage?.path}/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
-
             await downloadFile(
-              url: url,
-              description: 'File Download',
-              title: nameWithoutExtension,
-              filePath: '${baseStorage?.path}/$nameWithoutExtension.$fileExtension',
-            );
-
+                url,
+                fileName ?? nameWithoutExtension,
+                '$nameWithoutExtension.$fileExtension',
+                '${baseStorage?.path}/$nameWithoutExtension.$fileExtension');
             if (kDebugMode) {
               print('PDF Downloaded successfully. Path: ${file.path}');
             }
           } else {
-            int lastSlashIndex = uriPath.lastIndexOf('/');
-            String fileNameWithExtension =
-                uriPath.substring(lastSlashIndex + 1);
-            int dotIndex = fileNameWithExtension.lastIndexOf('.');
-            String fileExtension = uriPath
-                .toString()
-                .substring(uriPath.toString().toLowerCase().length - 3);
+            String fileExtension = FileNameFormat().fileNameExtension(url);
             String nameWithoutExtension =
-                fileName ?? fileNameWithExtension.substring(0, dotIndex);
-            if(extension != null) {
-              fileExtension = extension;
-            }
-            if(fileName != null) {
-              nameWithoutExtension = fileName;
-            }
+                FileNameFormat().fileNameWithOutExtension(url);
             final File file =
                 File('$location/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
             await downloadFile(
-              url: url,
-              description: 'File Download',
-              title: nameWithoutExtension,
-              filePath: '$location/$nameWithoutExtension.$fileExtension',
-            );
+                url,
+                fileName ?? nameWithoutExtension,
+                nameWithoutExtension,
+                '$location/$nameWithoutExtension.$fileExtension');
             if (kDebugMode) {
               print('PDF Downloaded successfully. Path: ${file.path}');
             }
@@ -109,62 +87,37 @@ class MediaDownload {
         /// iOS platform logic is there
         /// How to file name is given location is fetch everything is mentioned.
 
-        else {
+        else if (Platform.isIOS) {
           if (location == null || location == '') {
             Directory documents = await getApplicationDocumentsDirectory();
-            int lastSlashIndex = uriPath.lastIndexOf('/');
-            String fileNameWithExtension =
-                uriPath.substring(lastSlashIndex + 1);
-            int dotIndex = fileNameWithExtension.lastIndexOf('.');
-            String fileExtension = uriPath
-                .toString()
-                .substring(uriPath.toString().toLowerCase().length - 3);
+            String fileExtension = FileNameFormat().fileNameExtension(url);
             String nameWithoutExtension =
-                fileName ?? fileNameWithExtension.substring(0, dotIndex);
-            if(extension != null) {
-              fileExtension = extension;
-            }
-            if(fileName != null) {
-              nameWithoutExtension = fileName;
-            }
-            final File file =
-                File('${documents.path}/$nameWithoutExtension.$fileExtension');
+                FileNameFormat().fileNameWithOutExtension(url);
+            final File file = File(
+                '${documents.path}/${fileName ?? nameWithoutExtension}.$fileExtension');
             await file.writeAsBytes(bytes);
-            //await showCustomNotification('File Download', nameWithoutExtension);
+            await showCustomNotification(fileName ?? nameWithoutExtension,
+                fileName ?? nameWithoutExtension);
             await openMediaFile(file.path);
             if (kDebugMode) {
               print('PDF Downloaded successfully. Path: ${file.path}');
             }
           } else {
-            ///Fetch file name without extension.
-            int lastSlashIndex = uriPath.lastIndexOf('/');
-            String fileNameWithExtension =
-                uriPath.substring(lastSlashIndex + 1);
-            int dotIndex = fileNameWithExtension.lastIndexOf('.');
-            String fileExtension = uriPath
-                .toString()
-                .substring(uriPath.toString().toLowerCase().length - 3);
+            String fileExtension = FileNameFormat().fileNameExtension(url);
             String nameWithoutExtension =
-                fileName ?? fileNameWithExtension.substring(0, dotIndex);
-            if(extension != null) {
-              fileExtension = extension;
-            }
-            if(fileName != null) {
-              nameWithoutExtension = fileName;
-            }
+                FileNameFormat().fileNameWithOutExtension(url);
             final File file =
                 File('$location/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
-            //await showCustomNotification('File Download', nameWithoutExtension);
+            await showCustomNotification(
+                fileName ?? nameWithoutExtension, nameWithoutExtension);
             await openMediaFile(file.path);
             if (kDebugMode) {
               print('PDF Downloaded successfully. Path: ${file.path}');
             }
           }
-        }
-      } else {
-        if (kDebugMode) {
-          print('API Request failed with status ${response.statusCode}');
+        } else {
+          debugPrint('Platform Windows');
         }
       }
     } catch (e) {
