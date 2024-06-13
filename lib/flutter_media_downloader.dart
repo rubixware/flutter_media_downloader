@@ -57,10 +57,10 @@ class MediaDownload {
                 '${baseStorage?.path}/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
             await downloadFile(
-                url,
-                fileName ?? nameWithoutExtension,
-                '$nameWithoutExtension.$fileExtension',
-                '${baseStorage?.path}/$nameWithoutExtension.$fileExtension');
+                url: url,
+                title: fileName ?? nameWithoutExtension,
+                description: '$nameWithoutExtension.$fileExtension',
+                filePath: '${baseStorage?.path}/$nameWithoutExtension.$fileExtension');
             if (kDebugMode) {
               print('PDF Downloaded successfully. Path: ${file.path}');
             }
@@ -72,10 +72,10 @@ class MediaDownload {
                 File('$location/$nameWithoutExtension.$fileExtension');
             await file.writeAsBytes(bytes);
             await downloadFile(
-                url,
-                fileName ?? nameWithoutExtension,
-                nameWithoutExtension,
-                '$location/$nameWithoutExtension.$fileExtension');
+                url: url,
+                title: fileName ?? nameWithoutExtension,
+                description: nameWithoutExtension,
+                filePath: '$location/$nameWithoutExtension.$fileExtension');
             if (kDebugMode) {
               print('PDF Downloaded successfully. Path: ${file.path}');
             }
